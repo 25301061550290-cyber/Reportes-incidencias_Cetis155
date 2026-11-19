@@ -14,6 +14,7 @@ var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
 });
 
 var ST = { pendiente: 'Pendiente', proceso: 'En proceso', resuelta: 'Resuelta' };
+var T0 = Date.now();
 var auth = false, userId = '', filtro = 'todos', cache = [];
 var SEL = 'id,folio,nombre,matricula,descripcion,foto_path,estado,created_at,fecha_resuelta,areas(nombre)';
 
@@ -94,9 +95,13 @@ $('enviar').onclick = async function () {
   if (m.length < 4) return $('err1').textContent = 'La matrícula debe tener al menos 4 caracteres.';
   if (!a) return $('err1').textContent = 'Selecciona el área afectada.';
   if (d.length < 10) return $('err1').textContent = 'Describe el problema con al menos 10 caracteres.';
-  if (f && !/^image\//.test(f.type)) return $('err1').textContent = 'El archivo debe ser una imagen.';
+    if (f && !/^image\//.test(f.type)) return $('err1').textContent = 'El archivo debe ser una imagen.';
+  if ($('web').value) return;
+  if (Date.now() - T0 < 3000) return $('err1').textContent = 'Espera un momento e inténtalo de nuevo.';
   $('err1').textContent = ''; $('enviar').disabled = true; $('enviar').textContent = 'Enviando…';
   try {
+    var lim = await sb.rpc('verificar_limite_reportes', { p_matricula: m });
+    if (lim.error) throw lim.error;
     var path = null;
     if (f) {
       var blob = await comprimir(f);
