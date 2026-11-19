@@ -153,6 +153,10 @@ button.del:disabled{color:var(--mute);border-color:var(--line);opacity:.85;curso
 <label for="desc">Describe el problema</label><textarea id="desc" maxlength="600" placeholder="Qué ocurrió, dónde y desde cuándo."></textarea>
 <label for="foto">Fotografía como evidencia (opcional)</label><input id="foto" type="file" accept="image/*"><div id="prev"></div>
 <p class="err" id="err1" role="alert"></p>
+   <div style="position:absolute;left:-9999px" aria-hidden="true">
+  <label for="web">Sitio web</label>
+  <input id="web" name="website" tabindex="-1" autocomplete="off">
+</div>
 <button id="enviar">Enviar reporte</button>
 </div>
 <div id="done" hidden></div>
